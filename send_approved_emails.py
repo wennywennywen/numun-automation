@@ -1,5 +1,5 @@
 """
-afternoon_job.py — runs at 13:00 every day via cron
+send_approved_emails.py — runs at 13:00 every day via cron
 Checks Discord for ✅ reactions, sends emails for approved invoices
 """
 import os
