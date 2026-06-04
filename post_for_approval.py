@@ -1,5 +1,5 @@
 """
-noon_job.py — runs at 12:00 every day via cron
+post_for_approval.py — runs at 12:00 every day via cron
 Posts all pending invoices to Discord for EA approval
 """
 import os
