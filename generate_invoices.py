@@ -1,5 +1,5 @@
 """
-night_job.py — runs at 23:59 every day via cron
+generate_invoices.py — runs at 23:59 every day via cron
 Collects all new registrations from today, generates invoices, saves to pending.json
 """
 import os
