@@ -4,12 +4,9 @@ Posts all pending invoices to Discord for EA approval
 """
 import os
 import json
-import asyncio
 import discord
 import config
 from datetime import datetime
-
-PENDING_FILE = "pending.json"
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -25,12 +22,12 @@ async def on_ready():
 
 
 async def post_pending_invoices():
-    if not os.path.exists(PENDING_FILE):
+    if not os.path.exists(config.PENDING_FILE):
         print("No pending file found.")
         await client.close()
         return
 
-    with open(PENDING_FILE, "r") as f:
+    with open(config.PENDING_FILE, "r", encoding="utf-8") as f:
         pending = json.load(f)
 
     unposted = [p for p in pending if not p["approved"] and not p["emailed"] and p["discord_message_id"] is None]
@@ -62,7 +59,7 @@ async def post_pending_invoices():
         entry["discord_message_id"] = str(message.id)
         print(f"Posted invoice for {entry['full_name']} (message ID: {message.id})")
 
-    with open(PENDING_FILE, "w") as f:
+    with open(config.PENDING_FILE, "w", encoding="utf-8") as f:
         json.dump(pending, f, indent=2)
 
     print(f"[{datetime.now()}] Noon job done. {len(unposted)} invoice(s) posted to Discord.")

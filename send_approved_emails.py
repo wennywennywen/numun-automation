@@ -10,8 +10,6 @@ from datetime import datetime
 from gmail_sender import send_invoice_email
 import sheets
 
-PENDING_FILE = "pending.json"
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.reactions = True
@@ -26,12 +24,12 @@ async def on_ready():
 
 
 async def check_and_send():
-    if not os.path.exists(PENDING_FILE):
+    if not os.path.exists(config.PENDING_FILE):
         print("No pending file found.")
         await client.close()
         return
 
-    with open(PENDING_FILE, "r", encoding="utf-8") as f:
+    with open(config.PENDING_FILE, "r", encoding="utf-8") as f:
         pending = json.load(f)
 
     channel = client.get_channel(config.DISCORD_CHANNEL_ID)
@@ -60,7 +58,7 @@ async def check_and_send():
 
         if approved:
             # Send to both emails, deduplicated
-            emails_to_send = set([entry["email"]])
+            emails_to_send = {entry["email"]}
             if entry.get("google_email"):
                 emails_to_send.add(entry["google_email"])
 
@@ -83,7 +81,7 @@ async def check_and_send():
         else:
             print(f"No approval yet for {entry['full_name']}, skipping.")
 
-    with open(PENDING_FILE, "w", encoding="utf-8") as f:
+    with open(config.PENDING_FILE, "w", encoding="utf-8") as f:
         json.dump(pending, f, indent=2, ensure_ascii=False)
 
     print(f"[{datetime.now()}] Afternoon job done. {sent_count} email(s) sent.")

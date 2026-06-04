@@ -18,3 +18,4 @@ DISCORD_CHANNEL_ID = int(os.getenv("DISCORD_CHANNEL_ID", "0"))
 
 # Paths
 PDF_OUTPUT_DIR = os.getenv("PDF_OUTPUT_DIR", "invoices")
+PENDING_FILE = "pending.json"
