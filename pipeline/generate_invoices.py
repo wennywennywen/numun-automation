@@ -7,8 +7,10 @@ import json
 import random
 import string
 from datetime import datetime, timedelta
-import sheets
-from invoice import generate_invoice_pdf
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from core import sheets
+from core.invoice import generate_invoice_pdf
 import config
 
 

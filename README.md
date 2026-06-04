@@ -39,15 +39,18 @@ send_approved_emails.py   (runs at 13:00 daily)
 
 ```
 numun-automation/
-├── generate_invoices.py      # Collects new applications, generates invoice PDFs
-├── post_for_approval.py      # Posts invoices to Discord for EA approval
-├── send_approved_emails.py   # Sends emails after Discord approval
-├── invoice.py                # PDF generation logic (template fill + merge)
-├── gmail_sender.py           # Email sending via Gmail OAuth
-├── sheets.py                 # Google Sheets read/write helpers
-├── config.py                 # Centralised config loaded from .env
-├── requirements.txt          # Python dependencies
-└── .env.example              # Environment variable template (see Setup)
+├── pipeline/                     # Scheduled daily scripts (run via cron)
+│   ├── generate_invoices.py      # 23:59 — collect applications, generate PDFs
+│   ├── post_for_approval.py      # 12:00 — post invoices to Discord for review
+│   └── send_approved_emails.py   # 13:00 — send emails after ✅ approval
+├── core/                         # Business logic
+│   ├── invoice.py                # PDF generation (template fill + merge)
+│   ├── gmail_sender.py           # Email delivery via Gmail OAuth
+│   └── sheets.py                 # Google Sheets read/write helpers
+├── invoices/                     # Generated PDFs (gitignored)
+├── config.py                     # Centralised config loaded from .env
+├── requirements.txt              # Python dependencies
+└── .env.example                  # Environment variable template
 ```
 
 ## Setup
@@ -85,9 +88,9 @@ PDF_OUTPUT_DIR=invoices
 crontab -e
 ```
 ```
-59 23 * * * cd /path/to/numun-automation && python generate_invoices.py
-0  12 * * * cd /path/to/numun-automation && python post_for_approval.py
-0  13 * * * cd /path/to/numun-automation && python send_approved_emails.py
+59 23 * * * cd /path/to/numun-automation && python pipeline/generate_invoices.py
+0  12 * * * cd /path/to/numun-automation && python pipeline/post_for_approval.py
+0  13 * * * cd /path/to/numun-automation && python pipeline/send_approved_emails.py
 ```
 
 ## Key Design Decisions

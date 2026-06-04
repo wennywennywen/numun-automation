@@ -7,8 +7,10 @@ import json
 import discord
 import config
 from datetime import datetime
-from gmail_sender import send_invoice_email
-import sheets
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from core.gmail_sender import send_invoice_email
+from core import sheets
 
 intents = discord.Intents.default()
 intents.message_content = True
